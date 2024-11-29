@@ -2,7 +2,7 @@ library(tidyCDISC)
 library(tidyverse)
 library(ggalluvial)
 library(DiagrammeR)
-
+library(htmlwidgets)
 
 data('adae', package='tidyCDISC')
 data('adsl', package='tidyCDISC')
@@ -41,7 +41,7 @@ popd <- adsl %>% rename_all(tolower) %>% filter(saffl=='Y' & disconfl=='Y') %>% 
 popds <- adsl %>% rename_all(tolower) %>% filter(saffl=='Y' & disconfl=='Y') %>% group_by(trt01a, dcsreas) %>% count() %>% 
   mutate(col1=paste0(dcsreas,' : ',n)) %>% group_by(trt01a) %>% summarize(col1=paste(col1, collapse = '\n'))
 
-DiagrammeR::grViz("
+consort <- DiagrammeR::grViz("
               digraph box  {                
               // title
                compound=true;
@@ -119,3 +119,5 @@ DiagrammeR::grViz("
               
 
                   ")
+
+saveWidget(consort, "consort.html", selfcontained = TRUE)
